@@ -1,5 +1,71 @@
-import tkinter as master
+import tkinter as tk
 class Board:
+    def __init__(self, master):
+        self.master = master
+        self.frame = tk.Frame(self.master)
+
+        self.BUTTON_WIDTH = 10
+        self.DEFAULT_COLOUR = "grey"
+        self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
+
+        self.mainmenu = tk.Menu()
+        self.mainmenu.add_command(label="Reset", command=self.reset)
+
+        self.label = tk.Label(text="Input Letters")
+        self.label.grid(row=0, column=2)
+
+        self.entry1 = tk.Entry(justify=tk.CENTER)
+        self.entry2 = tk.Entry(justify=tk.CENTER)
+        self.entry3 = tk.Entry(justify=tk.CENTER)
+        self.entry4 = tk.Entry(justify=tk.CENTER)
+        self.entry5 = tk.Entry(justify=tk.CENTER)
+
+        self.entry1.grid(row=1, column=0)
+        self.entry2.grid(row=1, column=1)
+        self.entry3.grid(row=1, column=2)
+        self.entry4.grid(row=1, column=3)
+        self.entry5.grid(row=1, column=4)
+
+        self.button1 = tk.Button(command=self.changeColourButton1, bg=self.button1Colour)
+        self.button2 = tk.Button(command=self.changeColourButton2, bg=self.button2Colour)
+        self.button3 = tk.Button(command=self.changeColourButton3, bg=self.button3Colour)
+        self.button4 = tk.Button(command=self.changeColourButton4, bg=self.button4Colour)
+        self.button5 = tk.Button(command=self.changeColourButton5, bg=self.button5Colour)
+
+        self.button1.config(width=self.BUTTON_WIDTH)
+        self.button2.config(width=self.BUTTON_WIDTH)
+        self.button3.config(width=self.BUTTON_WIDTH)
+        self.button4.config(width=self.BUTTON_WIDTH)
+        self.button5.config(width=self.BUTTON_WIDTH)
+
+        self.button1.grid(row=2, column=0)
+        self.button2.grid(row=2, column=1)
+        self.button3.grid(row=2, column=2)
+        self.button4.grid(row=2, column=3)
+        self.button5.grid(row=2, column=4)
+
+        self.goButton = tk.Button(command=self.start, bg="cyan", text="Go!")
+        self.goButton.config(width=2*self.BUTTON_WIDTH)
+        self.goButton.grid(row=3, column=2)
+
+        self.usedLettersLabel = tk.Label(text="Used Letters")
+        self.usedLettersLabel.grid(row=4, column=1)
+
+        self.usedLetters = ["a","b","c"]
+        self.usedLettersListBox = tk.Listbox()
+        for item in self.usedLetters:
+            self.usedLettersListBox.insert(tk.END, item)
+        self.usedLettersListBox.grid(row=5, column=1)
+
+        self.usedLettersLabel = tk.Label(text="Guessed Words")
+        self.usedLettersLabel.grid(row=4, column=3)
+
+        self.usedLetters = ["Queen", "Penis", "There"]
+        self.usedLettersListBox = tk.Listbox()
+        for item in self.usedLetters:
+            self.usedLettersListBox.insert(tk.END, item)
+        self.usedLettersListBox.grid(row=5, column=3)
+
     def changeColourButton1(self):
         if self.button1Colour == "grey":
             self.button1Colour = "green"
@@ -62,71 +128,3 @@ class Board:
     def start(self):
         print("started")
         return
-
-    def ___init__(self):
-        self.BUTTON_WIDTH = 10
-        self.DEFAULT_COLOUR = "grey"
-        self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
-
-        window = master.Tk()
-        window.geometry("1000x500")
-
-        mainmenu = master.Menu()
-        mainmenu.add_command(label="Reset", command=self.reset)
-
-        label = master.Label(text="Input Letters")
-        label.grid(row=0, column=2)
-
-        entry1 = master.Entry(justify=master.CENTER)
-        entry2 = master.Entry(justify=master.CENTER)
-        entry3 = master.Entry(justify=master.CENTER)
-        entry4 = master.Entry(justify=master.CENTER)
-        entry5 = master.Entry(justify=master.CENTER)
-
-        entry1.grid(row=1, column=0)
-        entry2.grid(row=1, column=1)
-        entry3.grid(row=1, column=2)
-        entry4.grid(row=1, column=3)
-        entry5.grid(row=1, column=4)
-
-        button1 = master.Button(command=self.changeColourButton1, bg=self.button1Colour)
-        button2 = master.Button(command=self.changeColourButton2, bg=self.button2Colour)
-        button3 = master.Button(command=self.changeColourButton3, bg=self.button3Colour)
-        button4 = master.Button(command=self.changeColourButton4, bg=self.button4Colour)
-        button5 = master.Button(command=self.changeColourButton5, bg=self.button5Colour)
-
-        button1.config(width=self.BUTTON_WIDTH)
-        button2.config(width=self.BUTTON_WIDTH)
-        button3.config(width=self.BUTTON_WIDTH)
-        button4.config(width=self.BUTTON_WIDTH)
-        button5.config(width=self.BUTTON_WIDTH)
-
-        button1.grid(row=2, column=0)
-        button2.grid(row=2, column=1)
-        button3.grid(row=2, column=2)
-        button4.grid(row=2, column=3)
-        button5.grid(row=2, column=4)
-
-        goButton = master.Button(command=self.start, bg="cyan", text="Go!")
-        goButton.config(width=2*self.BUTTON_WIDTH)
-        goButton.grid(row=3, column=2)
-
-        usedLettersLabel = master.Label(text="Used Letters")
-        usedLettersLabel.grid(row=4, column=1)
-
-        usedLetters = ["a","b","c"]
-        usedLettersListBox = master.Listbox()
-        for item in usedLetters:
-            usedLettersListBox.insert(master.END, item)
-        usedLettersListBox.grid(row=5, column=1)
-
-        usedLettersLabel = master.Label(text="Guessed Words")
-        usedLettersLabel.grid(row=4, column=3)
-
-        usedLetters = ["Queen", "Penis", "There"]
-        usedLettersListBox = master.Listbox()
-        for item in usedLetters:
-            usedLettersListBox.insert(master.END, item)
-        usedLettersListBox.grid(row=5, column=3)
-
-        window.mainloop()
