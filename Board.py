@@ -228,5 +228,5 @@ class Board:
             self.setListBoxes()
             self.clearEntries()
             self.resetButtons()
-        else:
+        elif not doGame and not win:
             messagebox.showerror(title="Incorrect Data", message="Must input letters of one space.")
