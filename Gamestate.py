@@ -58,3 +58,8 @@ class Gamestate:
     def getWords(fileName):
         with open(fileName, "r") as file:
             return [word.strip() for word in file.readlines()]
+            
+    def start():
+        print("started")
+    def reset():
+        print("reseted")

@@ -1,8 +1,10 @@
 from Board import Board
+import tkinter as tk
 
 def main():
-    board = Board()
-    board.changeColourButton1()
-    
+    root = tk.Tk()
+    board = Board(root)
+    root.mainloop()
 
-main()
+if __name__ == '__main__':
+    main()
