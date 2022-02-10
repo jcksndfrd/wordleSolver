@@ -66,7 +66,7 @@ class Board:
         self.topWordsLabel = tk.Label(text="Top Words")
         self.topWordsLabel.grid(row=4, column=2)
 
-        self.topWords = []
+        self.topWords = self.game.topWords()
         self.topWordsListBox = tk.Listbox()
 
         self.usedWordsLabel = tk.Label(text="Guessed Words")
@@ -157,13 +157,17 @@ class Board:
     
     def reset(self):
         self.game.reset()
+        self.topWords = []
+        self.usedWords = []
+        self.usedLetters = []
+        self.clearEntries()
+
+    def clearEntries(self):
         self.entry1.setvar("")
         self.entry2.setvar("")
         self.entry3.setvar("")
         self.entry4.setvar("")
         self.entry5.setvar("")
-        self.usedWords = []
-        self.usedLetters = []
 
     def useTopWord(self):
         self.entry1.setvar(self.filteredWords[0][0])
@@ -186,11 +190,12 @@ class Board:
             self.game.filterWords(word, numbers)
         
             for i, l in enumerate(letters):
-                if numbers[l] == 0:
+                if numbers[i] == 0:
                     self.usedLetters.append(l)
                     
             self.usedWords.append(word)
+            self.topWords = self.game.topWords(5)
             self.setListBoxes()
+            self.clearEntries()
         else:
             messagebox.showerror(title="Incorrect Data", message="Must input letters of one space.")
-        

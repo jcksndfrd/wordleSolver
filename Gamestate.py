@@ -61,10 +61,6 @@ class Gamestate:
         with open(fileName, "r") as file:
             return [word.strip() for word in file.readlines()]
 
-            
-    def start():
-        print("started")
-
     def reset(self):
         self.words = Gamestate.getWords()
         self.unknown = list(range(5))
