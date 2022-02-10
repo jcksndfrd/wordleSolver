@@ -62,5 +62,5 @@ class Gamestate:
             return [word.strip() for word in file.readlines()]
 
     def reset(self):
-        self.words = Gamestate.getWords()
+        self.words = Gamestate.getWords("words.txt")
         self.unknown = list(range(5))

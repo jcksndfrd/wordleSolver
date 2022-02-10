@@ -9,16 +9,9 @@ class Board:
         self.master = master
         self.frame = tk.Frame(self.master)
 
-        self.filteredWords = []
         self.BUTTON_WIDTH = 10
         self.DEFAULT_COLOUR = "grey"
         self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
-
-        self.menubar = tk.Menu(self.master)
-        self.menubar.add_command(label="Exit", command=self.master.quit)
-        self.menubar.add_command(label="Use top word", command=self.useTopWord())
-        self.menubar.add_command(label="Reset", command=self.reset())
-        self.master.config(menu=self.menubar)
 
         self.label = tk.Label(text="Input Letters")
         self.label.grid(row=0, column=2)
@@ -66,7 +59,7 @@ class Board:
         self.topWordsLabel = tk.Label(text="Top Words")
         self.topWordsLabel.grid(row=4, column=2)
 
-        self.topWords = self.game.topWords()
+        self.topWords = self.game.topWords(5)
         self.topWordsListBox = tk.Listbox()
 
         self.usedWordsLabel = tk.Label(text="Guessed Words")
@@ -76,15 +69,24 @@ class Board:
         self.usedWordsListBox = tk.Listbox()
         self.setListBoxes()
 
+        self.menubar = tk.Menu(self.master)
+        self.menubar.add_command(label="Exit", command=self.master.quit)
+        self.menubar.add_command(label="Use top word", command=self.useTopWord)
+        self.menubar.add_command(label="Reset", command=self.reset)
+        self.master.config(menu=self.menubar)
+
     def setListBoxes(self):
+        self.usedLettersListBox.delete(0, tk.END)
         for item in self.usedLetters:
             self.usedLettersListBox.insert(tk.END, item)
         self.usedLettersListBox.grid(row=5, column=1)
         
+        self.topWordsListBox.delete(0, tk.END)
         for item in self.topWords:
             self.topWordsListBox.insert(tk.END, item)
         self.topWordsListBox.grid(row=5, column=2)
 
+        self.usedWordsListBox.delete(0, tk.END)
         for item in self.usedWords:
             self.usedWordsListBox.insert(tk.END, item)
         self.usedWordsListBox.grid(row=5, column=3)
@@ -157,28 +159,45 @@ class Board:
     
     def reset(self):
         self.game.reset()
-        self.topWords = []
+        self.topWords = self.game.topWords(5)
         self.usedWords = []
         self.usedLetters = []
         self.clearEntries()
+        self.setListBoxes()
+        self.resetButtons()
+
+    def resetButtons(self):
+        self.button1Colour = "grey"
+        self.button2Colour = "grey"
+        self.button3Colour = "grey"
+        self.button4Colour = "grey"
+        self.button5Colour = "grey"
+        self.button1.configure(bg=self.button1Colour)
+        self.button2.configure(bg=self.button2Colour)
+        self.button3.configure(bg=self.button3Colour)
+        self.button4.configure(bg=self.button4Colour)
+        self.button5.configure(bg=self.button5Colour)
+
 
     def clearEntries(self):
-        self.entry1.setvar("")
-        self.entry2.setvar("")
-        self.entry3.setvar("")
-        self.entry4.setvar("")
-        self.entry5.setvar("")
+        self.entry1.delete(0, "end")
+        self.entry2.delete(0, "end")
+        self.entry3.delete(0, "end")
+        self.entry4.delete(0, "end")
+        self.entry5.delete(0, "end")
 
     def useTopWord(self):
-        self.entry1.setvar(self.filteredWords[0][0])
-        self.entry2.setvar(self.filteredWords[0][1])
-        self.entry3.setvar(self.filteredWords[0][2])
-        self.entry4.setvar(self.filteredWords[0][3])
-        self.entry5.setvar(self.filteredWords[0][4])
+        self.clearEntries()
+        self.entry1.insert(0, self.topWords[0][0])
+        self.entry2.insert(0, self.topWords[0][1])
+        self.entry3.insert(0, self.topWords[0][2])
+        self.entry4.insert(0, self.topWords[0][3])
+        self.entry5.insert(0, self.topWords[0][4])
 
     def start(self):
         letters = [self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get(), self.entry5.get()]
         word = "".join(letters)
+
         doGame = True
         for _, item in enumerate(letters):
             if not checkdataIsOneLetter(item):
@@ -186,16 +205,28 @@ class Board:
 
         numbers = self.getNumbersFromButtons()
 
+        win = True
+        for n in numbers:
+            if n != 1:
+                win = False
+        
+        if win:
+            doGame = False
+            messagebox.showinfo(title="You Win!", message="Congradulations! You are a winner!")
+            self.reset()
+
         if doGame:
+            
             self.game.filterWords(word, numbers)
         
             for i, l in enumerate(letters):
                 if numbers[i] == 0:
-                    self.usedLetters.append(l)
-                    
+                    if l not in self.usedLetters:
+                        self.usedLetters.append(l)
             self.usedWords.append(word)
             self.topWords = self.game.topWords(5)
             self.setListBoxes()
             self.clearEntries()
+            self.resetButtons()
         else:
             messagebox.showerror(title="Incorrect Data", message="Must input letters of one space.")
