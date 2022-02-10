@@ -8,8 +8,8 @@ class Gamestate:
         self.guesses = 0
     
     def nextGuess(self):
-        guess = self.getBestWord()
-        print("Guess: " + guess)
+        self.guess = self.getBestWord()
+        print("Guess: " + self.guess)
         status = [int(n) for n in input("Status: ")]
 
         for i, s in enumerate(status):
@@ -19,21 +19,21 @@ class Gamestate:
                 for word in self.words:
 
                     for j, letter in enumerate(word):
-                        if status[j] == 2 and letter == guess[i]:
+                        if status[j] == 2 and letter == self.guess[i]:
                             updated_words.append(word)
 
-                    if guess[i] not in word:
+                    if self.guess[i] not in word:
                         updated_words.append(word)
 
                 self.words = updated_words
 
             elif s == 1:
-                self.words = [word for word in self.words if word[i] == guess[i]]
+                self.words = [word for word in self.words if word[i] == self.guess[i]]
                 if i not in self.unknown:
                     self.unknown.remove(i)
 
             elif s == 2:
-                self.words = [word for word in self.words if word[i] != guess[i] and guess[i] in word]
+                self.words = [word for word in self.words if word[i] != self.guess[i] and self.guess[i] in word]
 
         
     def getBestWord(self):

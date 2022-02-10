@@ -3,7 +3,7 @@ import tkinter as tk
 
 def main():
     root = tk.Tk()
-    board = Board(root)
+    Board(root)
     root.mainloop()
 
 if __name__ == '__main__':
