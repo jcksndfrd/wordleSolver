@@ -1,6 +1,10 @@
 import tkinter as tk
+from Gamestate import Gamestate
+from checkData import checkdataIsOneLetter
+
 class Board:
     def __init__(self, master):
+        self.game = Gamestate()
         self.master = master
         self.frame = tk.Frame(self.master)
 
@@ -122,9 +126,14 @@ class Board:
             self.button5.configure(bg=self.button5Colour)
 
     def reset(self):
-        print("reseted")
-        return
+        self.game.reset()
 
     def start(self):
-        print("started")
-        return
+        letters = [self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get(), self.entry5.get()]
+        doGame = True
+        for _, item in enumerate(letters):
+            if not checkdataIsOneLetter(item):
+                doGame = False
+
+        if doGame:
+            self.game.start()
