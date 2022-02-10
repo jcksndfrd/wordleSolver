@@ -178,7 +178,6 @@ class Board:
         self.button4.configure(bg=self.button4Colour)
         self.button5.configure(bg=self.button5Colour)
 
-
     def clearEntries(self):
         self.entry1.delete(0, "end")
         self.entry2.delete(0, "end")
@@ -204,7 +203,6 @@ class Board:
                 doGame = False
 
         numbers = self.getNumbersFromButtons()
-
         win = True
         for n in numbers:
             if n != 1:
@@ -216,7 +214,6 @@ class Board:
             self.reset()
 
         if doGame:
-            
             self.game.filterWords(word, numbers)
         
             for i, l in enumerate(letters):
