@@ -33,7 +33,6 @@ class Gamestate:
             elif s == 2:
                 self.words = [word for word in self.words if word[i] != guess[i] and guess[i] in word]
 
-        
     def getBestWord(self):
         ratedLetters = self.rateLetters()
         return max(self.words, key=lambda word: self.rateWord(word, ratedLetters))
