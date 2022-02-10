@@ -4,14 +4,12 @@ class Gamestate:
     def __init__(self):
         self.words = Gamestate.getWords("words.txt")
         self.unknown = list(range(5))
-        self.guess = ""
-        self.guesses = 0
-    
-    def nextGuess(self):
-        self.guess = self.getBestWord()
-        print("Guess: " + self.guess)
-        status = [int(n) for n in input("Status: ")]
 
+    def topWords(self, n):
+        sortedWords = self.getSortedWords()
+        return sortedWords[:min(n, len(sortedWords))]
+
+    def filterWords(self, guess, status):
         for i, s in enumerate(status):
             if s == 0:
                 updated_words = []
@@ -19,27 +17,31 @@ class Gamestate:
                 for word in self.words:
 
                     for j, letter in enumerate(word):
-                        if status[j] == 2 and letter == self.guess[i]:
+                        if status[j] == 2 and letter == guess[i]:
                             updated_words.append(word)
 
-                    if self.guess[i] not in word:
+                    if guess[i] not in word:
                         updated_words.append(word)
 
                 self.words = updated_words
 
             elif s == 1:
-                self.words = [word for word in self.words if word[i] == self.guess[i]]
+                self.words = [word for word in self.words if word[i] == guess[i]]
                 if i not in self.unknown:
                     self.unknown.remove(i)
 
             elif s == 2:
-                self.words = [word for word in self.words if word[i] != self.guess[i] and self.guess[i] in word]
+                self.words = [word for word in self.words if word[i] != guess[i] and guess[i] in word]
 
         
     def getBestWord(self):
         ratedLetters = self.rateLetters()
         return max(self.words, key=lambda word: self.rateWord(word, ratedLetters))
-
+    
+    def getSortedWords(self):
+        ratedLetters = self.rateLetters()
+        return sorted(self.words, key=lambda word: self.rateWord(word, ratedLetters), reverse=True)
+        
     def rateWord(self, word, scores):
         score = 0
         for letter, value in scores.items():
@@ -58,8 +60,11 @@ class Gamestate:
     def getWords(fileName):
         with open(fileName, "r") as file:
             return [word.strip() for word in file.readlines()]
+
             
     def start():
         print("started")
-    def reset():
-        print("reseted")
+
+    def reset(self):
+        self.words = Gamestate.getWords()
+        self.unknown = list(range(5))
