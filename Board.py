@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from Gamestate import Gamestate
 from checkData import checkdataIsOneLetter
 
@@ -8,12 +9,16 @@ class Board:
         self.master = master
         self.frame = tk.Frame(self.master)
 
+        self.filteredWords = []
         self.BUTTON_WIDTH = 10
         self.DEFAULT_COLOUR = "grey"
         self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
 
-        self.mainmenu = tk.Menu()
-        self.mainmenu.add_command(label="Reset", command=self.reset)
+        self.menubar = tk.Menu(self.master)
+        self.menubar.add_command(label="Exit", command=self.master.quit)
+        self.menubar.add_command(label="Use top word", command=self.useTopWord())
+        self.menubar.add_command(label="Reset", command=self.reset())
+        self.master.config(menu=self.menubar)
 
         self.label = tk.Label(text="Input Letters")
         self.label.grid(row=0, column=2)
@@ -55,20 +60,34 @@ class Board:
         self.usedLettersLabel = tk.Label(text="Used Letters")
         self.usedLettersLabel.grid(row=4, column=1)
 
-        self.usedLetters = ["a","b","c"]
+        self.usedLetters = []
         self.usedLettersListBox = tk.Listbox()
+
+        self.topWordsLabel = tk.Label(text="Top Words")
+        self.topWordsLabel.grid(row=4, column=2)
+
+        self.topWords = []
+        self.topWordsListBox = tk.Listbox()
+
+        self.usedWordsLabel = tk.Label(text="Guessed Words")
+        self.usedWordsLabel.grid(row=4, column=3)
+
+        self.usedWords = []
+        self.usedWordsListBox = tk.Listbox()
+        self.setListBoxes()
+
+    def setListBoxes(self):
         for item in self.usedLetters:
             self.usedLettersListBox.insert(tk.END, item)
         self.usedLettersListBox.grid(row=5, column=1)
+        
+        for item in self.topWords:
+            self.topWordsListBox.insert(tk.END, item)
+        self.topWordsListBox.grid(row=5, column=2)
 
-        self.usedLettersLabel = tk.Label(text="Guessed Words")
-        self.usedLettersLabel.grid(row=4, column=3)
-
-        self.usedLetters = ["Queen", "Penis", "There"]
-        self.usedLettersListBox = tk.Listbox()
-        for item in self.usedLetters:
-            self.usedLettersListBox.insert(tk.END, item)
-        self.usedLettersListBox.grid(row=5, column=3)
+        for item in self.usedWords:
+            self.usedWordsListBox.insert(tk.END, item)
+        self.usedWordsListBox.grid(row=5, column=3)
 
     def changeColourButton1(self):
         if self.button1Colour == "grey":
@@ -125,15 +144,53 @@ class Board:
             self.button5Colour = "grey"
             self.button5.configure(bg=self.button5Colour)
 
+    def getNumberFromString(self, text):
+        if text == "grey":
+            return 0
+        elif text == "green":
+            return 1
+        elif text == "orange":
+            return 2
+
+    def getNumbersFromButtons(self):
+        return [self.getNumberFromString(self.button1Colour), self.getNumberFromString(self.button2Colour), self.getNumberFromString(self.button3Colour), self.getNumberFromString(self.button4Colour), self.getNumberFromString(self.button5Colour)]
+    
     def reset(self):
         self.game.reset()
+        self.entry1.setvar("")
+        self.entry2.setvar("")
+        self.entry3.setvar("")
+        self.entry4.setvar("")
+        self.entry5.setvar("")
+        self.usedWords = []
+        self.usedLetters = []
+
+    def useTopWord(self):
+        self.entry1.setvar(self.filteredWords[0][0])
+        self.entry2.setvar(self.filteredWords[0][1])
+        self.entry3.setvar(self.filteredWords[0][2])
+        self.entry4.setvar(self.filteredWords[0][3])
+        self.entry5.setvar(self.filteredWords[0][4])
 
     def start(self):
         letters = [self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get(), self.entry5.get()]
+        word = "".join(letters)
         doGame = True
         for _, item in enumerate(letters):
             if not checkdataIsOneLetter(item):
                 doGame = False
 
+        numbers = self.getNumbersFromButtons()
+
         if doGame:
-            self.game.start()
+            self.game.filterWords(word, numbers)
+        
+            for i, l in enumerate(letters):
+                if numbers[l] == 0:
+                    self.usedLetters.append(l)
+                    
+            self.usedWords.append(word)
+            self.setListBoxes()
+        else:
+            messagebox.showerror(title="Incorrect Data", message="Must input letters of one space.")
+        
