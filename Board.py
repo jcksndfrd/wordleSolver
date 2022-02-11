@@ -1,17 +1,13 @@
 import tkinter as tk
 from tkinter import messagebox
 from Gamestate import Gamestate
-from checkData import checkdataIsOneLetter
+import JamesLib as extras
 
 class Board:
     def __init__(self, master):
         self.game = Gamestate()
         self.master = master
         self.frame = tk.Frame(self.master)
-
-        self.BUTTON_WIDTH = 10
-        self.DEFAULT_COLOUR = "grey"
-        self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
 
         self.label = tk.Label(text="Input Letters")
         self.label.grid(row=0, column=2)
@@ -27,6 +23,11 @@ class Board:
         self.entry3.grid(row=1, column=2)
         self.entry4.grid(row=1, column=3)
         self.entry5.grid(row=1, column=4)
+
+        self.colourBlindMode = True
+        self.BUTTON_WIDTH = 10
+        self.setColourBlind()
+        self.button1Colour, self.button2Colour, self.button3Colour, self.button4Colour, self.button5Colour = self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR, self.DEFAULT_COLOUR
 
         self.button1 = tk.Button(command=self.changeColourButton1, bg=self.button1Colour)
         self.button2 = tk.Button(command=self.changeColourButton2, bg=self.button2Colour)
@@ -73,7 +74,19 @@ class Board:
         self.menubar.add_command(label="Exit", command=self.master.quit)
         self.menubar.add_command(label="Use top word", command=self.useTopWord)
         self.menubar.add_command(label="Reset", command=self.reset)
+        self.menubar.add_command(label="Colourblind Mode", command=self.setColourBlind)
         self.master.config(menu=self.menubar)
+
+    def setColourBlind(self):
+        self.colourBlindMode = not self.colourBlindMode
+        if self.colourBlindMode:
+            self.DEFAULT_COLOUR = "grey"
+            self.PRIMARY_COLOUR = "blue"
+            self.SECONDARY_COLOUR = "yellow"
+        else:
+            self.DEFAULT_COLOUR = "grey"
+            self.PRIMARY_COLOUR = "green"
+            self.SECONDARY_COLOUR = "orange"
 
     def setListBoxes(self):
         self.usedLettersListBox.delete(0, tk.END)
@@ -92,66 +105,66 @@ class Board:
         self.usedWordsListBox.grid(row=5, column=3)
 
     def changeColourButton1(self):
-        if self.button1Colour == "grey":
-            self.button1Colour = "green"
+        if self.button1Colour == self.DEFAULT_COLOUR:
+            self.button1Colour = self.PRIMARY_COLOUR
             self.button1.configure(bg=self.button1Colour)
-        elif self.button1Colour == "green":
-            self.button1Colour = "orange"
+        elif self.button1Colour == self.PRIMARY_COLOUR:
+            self.button1Colour = self.SECONDARY_COLOUR
             self.button1.configure(bg=self.button1Colour)
-        elif self.button1Colour == "orange":
-            self.button1Colour = "grey"
+        elif self.button1Colour == self.SECONDARY_COLOUR:
+            self.button1Colour = self.DEFAULT_COLOUR
             self.button1.configure(bg=self.button1Colour)
 
     def changeColourButton2(self):
-        if self.button2Colour == "grey":
-            self.button2Colour = "green"
+        if self.button2Colour == self.DEFAULT_COLOUR:
+            self.button2Colour = self.PRIMARY_COLOUR
             self.button2.configure(bg=self.button2Colour)
-        elif self.button2Colour == "green":
-            self.button2Colour = "orange"
+        elif self.button2Colour == self.PRIMARY_COLOUR:
+            self.button2Colour = self.SECONDARY_COLOUR
             self.button2.configure(bg=self.button2Colour)
-        elif self.button2Colour == "orange":
-            self.button2Colour = "grey"
+        elif self.button2Colour == self.SECONDARY_COLOUR:
+            self.button2Colour = self.DEFAULT_COLOUR
             self.button2.configure(bg=self.button2Colour)
 
     def changeColourButton3(self):
-        if self.button3Colour == "grey":
-            self.button3Colour = "green"
+        if self.button3Colour == self.DEFAULT_COLOUR:
+            self.button3Colour = self.PRIMARY_COLOUR
             self.button3.configure(bg=self.button3Colour)
-        elif self.button3Colour == "green":
-            self.button3Colour = "orange"
+        elif self.button3Colour == self.PRIMARY_COLOUR:
+            self.button3Colour = self.SECONDARY_COLOUR
             self.button3.configure(bg=self.button3Colour)
-        elif self.button3Colour == "orange":
-            self.button3Colour = "grey"
+        elif self.button3Colour == self.SECONDARY_COLOUR:
+            self.button3Colour = self.DEFAULT_COLOUR
             self.button3.configure(bg=self.button3Colour)
             
     def changeColourButton4(self):
-        if self.button4Colour == "grey":
-            self.button4Colour = "green"
+        if self.button4Colour == self.DEFAULT_COLOUR:
+            self.button4Colour = self.PRIMARY_COLOUR
             self.button4.configure(bg=self.button4Colour)
-        elif self.button4Colour == "green":
-            self.button4Colour = "orange"
+        elif self.button4Colour == self.PRIMARY_COLOUR:
+            self.button4Colour = self.SECONDARY_COLOUR
             self.button4.configure(bg=self.button4Colour)
-        elif self.button4Colour == "orange":
-            self.button4Colour = "grey"
+        elif self.button4Colour == self.SECONDARY_COLOUR:
+            self.button4Colour = self.DEFAULT_COLOUR
             self.button4.configure(bg=self.button4Colour)
             
     def changeColourButton5(self):
-        if self.button5Colour == "grey":
-            self.button5Colour = "green"
+        if self.button5Colour == self.DEFAULT_COLOUR:
+            self.button5Colour = self.PRIMARY_COLOUR
             self.button5.configure(bg=self.button5Colour)
-        elif self.button5Colour == "green":
-            self.button5Colour = "orange"
+        elif self.button5Colour == self.PRIMARY_COLOUR:
+            self.button5Colour = self.SECONDARY_COLOUR
             self.button5.configure(bg=self.button5Colour)
-        elif self.button5Colour == "orange":
-            self.button5Colour = "grey"
+        elif self.button5Colour == self.SECONDARY_COLOUR:
+            self.button5Colour = self.DEFAULT_COLOUR
             self.button5.configure(bg=self.button5Colour)
 
     def getNumberFromString(self, text):
-        if text == "grey":
+        if text == self.DEFAULT_COLOUR:
             return 0
-        elif text == "green":
+        elif text == self.PRIMARY_COLOUR:
             return 1
-        elif text == "orange":
+        elif text == self.SECONDARY_COLOUR:
             return 2
 
     def getNumbersFromButtons(self):
@@ -167,11 +180,11 @@ class Board:
         self.resetButtons()
 
     def resetButtons(self):
-        self.button1Colour = "grey"
-        self.button2Colour = "grey"
-        self.button3Colour = "grey"
-        self.button4Colour = "grey"
-        self.button5Colour = "grey"
+        self.button1Colour = self.DEFAULT_COLOUR
+        self.button2Colour = self.DEFAULT_COLOUR
+        self.button3Colour = self.DEFAULT_COLOUR
+        self.button4Colour = self.DEFAULT_COLOUR
+        self.button5Colour = self.DEFAULT_COLOUR
         self.button1.configure(bg=self.button1Colour)
         self.button2.configure(bg=self.button2Colour)
         self.button3.configure(bg=self.button3Colour)
@@ -199,14 +212,11 @@ class Board:
 
         doGame = True
         for _, item in enumerate(letters):
-            if not checkdataIsOneLetter(item):
+            if not extras.checkdataIsOneLetter(item):
                 doGame = False
 
         numbers = self.getNumbersFromButtons()
-        win = True
-        for n in numbers:
-            if n != 1:
-                win = False
+        win = extras.checkArrayElementsAreEqual(numbers)
         
         if win:
             doGame = False
