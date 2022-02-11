@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from Gamestate import Gamestate
+from State import State
 import JamesLib as extras
 
 class Board:
@@ -88,13 +89,13 @@ class Board:
         self.whoseAlgorithmLabel.grid(row=6, column=4)
 
     def jacksAlogirthm(self):
-        self.reset()
         self.game = Gamestate()
+        self.reset()
         self.whoseAlgorithmLabel.configure(text="Jacks")
 
     def jamesAlgorithm(self):
+        self.game = State()
         self.reset()
-        self.game = Gamestate()
         self.whoseAlgorithmLabel.configure(text="James'")
 
     def setColourBlind(self):
