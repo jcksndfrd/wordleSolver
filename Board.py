@@ -75,7 +75,27 @@ class Board:
         self.menubar.add_command(label="Use top word", command=self.useTopWord)
         self.menubar.add_command(label="Reset", command=self.reset)
         self.menubar.add_command(label="Colourblind Mode", command=self.setColourBlind)
+
+        self.algorithmMenu = tk.Menu(self.menubar, tearoff=False)
+        self.algorithmMenu.add_command(label="Jacks", command=self.jacksAlogirthm)
+        self.algorithmMenu.add_command(label="James'", command=self.jamesAlgorithm)
+        self.menubar.add_cascade(label="Choose Algorithm", menu=self.algorithmMenu)
         self.master.config(menu=self.menubar)
+
+        self.currentAlgorithmLabel = tk.Label(text="Current Algorithm:")
+        self.currentAlgorithmLabel.grid(row=6, column=3)
+        self.whoseAlgorithmLabel = tk.Label(text="Jacks")
+        self.whoseAlgorithmLabel.grid(row=6, column=4)
+
+    def jacksAlogirthm(self):
+        self.reset()
+        self.game = Gamestate()
+        self.whoseAlgorithmLabel.configure(text="Jacks")
+
+    def jamesAlgorithm(self):
+        self.reset()
+        self.game = Gamestate()
+        self.whoseAlgorithmLabel.configure(text="James'")
 
     def setColourBlind(self):
         self.colourBlindMode = not self.colourBlindMode
@@ -216,7 +236,7 @@ class Board:
                 doGame = False
 
         numbers = self.getNumbersFromButtons()
-        win = extras.checkArrayElementsAreEqual(numbers)
+        win = extras.checkArrayElementsAreEqualToVar(numbers, 1)
         
         if win:
             doGame = False

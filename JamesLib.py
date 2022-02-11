@@ -8,3 +8,9 @@ def checkArrayElementsAreEqual(data):
         if item != data[0]:
             return False
     return True
+
+def checkArrayElementsAreEqualToVar(data, var):
+    for item in data:
+        if item != var:
+            return False
+    return True
