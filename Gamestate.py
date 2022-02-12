@@ -11,7 +11,6 @@ class Gamestate:
 
     def filterWords(self, guess, status):
         for i, s in enumerate(status):
-            print(s)
             if s == 0:
                 updated_words = []
 
