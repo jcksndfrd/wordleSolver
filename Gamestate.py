@@ -11,14 +11,16 @@ class Gamestate:
 
     def filterWords(self, guess, status):
         for i, s in enumerate(status):
+            print(s)
             if s == 0:
                 updated_words = []
 
                 for word in self.words:
 
                     for j, letter in enumerate(word):
-                        if status[j] == 2 and letter == guess[i]:
+                        if i != j and letter == guess[i] == guess[j] and status[j] != 0:
                             updated_words.append(word)
+                            break
 
                     if guess[i] not in word:
                         updated_words.append(word)
