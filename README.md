@@ -8,6 +8,6 @@ the program will return a list of words to use. You can also click "Enter best w
 Algorithm:
 - [@jcksndfrd](https://github.com/jcksndfrd)
 
-GUI:
+GUI & Secondary Algorithm (In development):
 - [@jamessatherley](https://www.github.com/JamesSatherley) - Github
 - [@jamessatherley](https://gitlab.com/JamesSatherley) - Gitlab
